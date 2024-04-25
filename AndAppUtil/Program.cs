@@ -20,13 +20,26 @@ namespace AndAppUtil {
 
             // コンテキストメニュー
             var contextMenuStrip = new ContextMenuStrip();
-            var toolStripMenuItem = new ToolStripMenuItem();
-            toolStripMenuItem.Text = "終了";
-            toolStripMenuItem.Click += (sender, e) => {
-                notifyIcon.Visible = false;
-                Application.Exit();
-            };
-            contextMenuStrip.Items.Add(toolStripMenuItem);
+            {
+                var toolStripMenuItem = new ToolStripMenuItem {
+                    Text = "ウインドウ位置とか調整するやつ",
+                    Enabled = false,
+                };
+                contextMenuStrip.Items.Add(toolStripMenuItem);
+            }
+            {
+                contextMenuStrip.Items.Add(new ToolStripSeparator());
+            }
+            {
+                var toolStripMenuItem = new ToolStripMenuItem {
+                    Text = "終了",
+                };
+                toolStripMenuItem.Click += (sender, e) => {
+                    notifyIcon.Visible = false;
+                    Application.Exit();
+                };
+                contextMenuStrip.Items.Add(toolStripMenuItem);
+            }
             notifyIcon.ContextMenuStrip = contextMenuStrip;
         }
 
