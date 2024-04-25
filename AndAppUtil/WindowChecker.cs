@@ -164,6 +164,16 @@ namespace AndAppUtil {
                         v11LastLeft = windowBounds.left;
                         v11LastTop = windowBounds.top;
                         break;
+
+                    // Fences3のアップデート通知は閉じる
+                    case var (fileName, className, titleName) when fileName.Equals("SdDisplay.exe", StringComparison.OrdinalIgnoreCase) && titleName.Contains("Fences"):
+                        System.Diagnostics.Debug.WriteLine($"className: {className}");
+                        System.Diagnostics.Debug.WriteLine($"titleName: {titleName}");
+                        Task.Run(() => {
+                            Thread.Sleep(500);
+                            SendMessage(hWnd, 0x00000010 /* WM_CLOSE */, 0, 0);
+                        });
+                        break;
                 }
             }
 
