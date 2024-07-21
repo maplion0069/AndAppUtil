@@ -151,6 +151,22 @@ namespace AndAppUtil {
                                         0,
                                         0x0001 /* SWP_NOSIZE */ | 0x0004 /* SWP_NOZORDER */ | 0x0200 /* SWP_NOOWNERZORDER */
                                     );
+
+                                    // TODO: 画面外だったら再調整
+                                    RECT adjustBounds = new();
+                                    GetWindowRect(hWnd, out adjustBounds);
+                                    if (adjustBounds.right >= screenBounds.Value.Width || adjustBounds.bottom >= screenBounds.Value.Height) {
+                                        Thread.Sleep(250);
+                                        SetWindowPos(
+                                            hWnd,
+                                            0,
+                                            screenBounds.Value.Width - (adjustBounds.right - adjustBounds.left) - 48, // TODO: 設定ファイルから前回の座標を取得。今は右下。マルチディスプレイもタスクバーも考慮なし。
+                                            screenBounds.Value.Height - (adjustBounds.bottom - adjustBounds.top) - 48, // TODO: 設定ファイルから前回の座標を取得。今は右下。マルチディスプレイもタスクバーも考慮なし。
+                                            0,
+                                            0,
+                                            0x0001 /* SWP_NOSIZE */ | 0x0004 /* SWP_NOZORDER */ | 0x0200 /* SWP_NOOWNERZORDER */
+                                        );
+                                    }
                                 });
                             }
                             GetWindowRect(hWnd, out windowBounds);
