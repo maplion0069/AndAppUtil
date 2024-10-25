@@ -23,6 +23,10 @@ namespace AndAppUtil {
         [LibraryImport("kernel32.dll", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
         private static partial IntPtr OpenProcess(uint processAccess, [MarshalAs(UnmanagedType.Bool)] bool bInheritHandle, int processId);
 
+        [LibraryImport("kernel32.dll", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static partial bool CloseHandle(IntPtr processAccess);
+
         [LibraryImport("kernel32.dll", StringMarshalling = StringMarshalling.Utf16, SetLastError = true, EntryPoint = "QueryFullProcessImageNameW")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool QueryFullProcessImageName(IntPtr hProcess, int dwFlags, Span<char> lpExeName, ref int lpdwSize);
@@ -96,6 +100,7 @@ namespace AndAppUtil {
                 QueryFullProcessImageName(processHandle, 0, processPathBuffer, ref processPathCapacity);
                 var processFilePath = processPathBuffer.Slice(0, processPathBuffer.IndexOf('\0')).ToString();
                 var processFileName = processFilePath.Split("\\").Last();
+                CloseHandle(processHandle);
 
                 // ウインドウのクラス名を取得
                 Span<char> windowClassBuffer = stackalloc char[256];
